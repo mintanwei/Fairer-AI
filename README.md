@@ -29,7 +29,7 @@ Run OculoScope_fairness_analysis.py to get the results of age and gender fairn
 #### for narrow-angle
 Run MixNAF_val.py to get the results of the accuracy experiment.
 
-![Activation maps of FairerOPTH](https://github.com/mintanwei/Fairer-AI/blob/main/CAMs.jpg)
+<img title="Activation maps of FairerOPTH" src="https://github.com/mintanwei/Fairer-AI/blob/main/CAMs.jpg" width="60%">
 
 ### Contact
 Email: wmtan@fudan.edu.cn
