@@ -19,10 +19,10 @@ from torch.cuda.amp import autocast
 from metrics.multi_evalute import cal_metrics
 
 parser = argparse.ArgumentParser('--OculoScope fairness analysis')
-parser.add_argument('--gpuid', type=str, default='2')
+parser.add_argument('--gpuid', type=str, default='0')
 parser.add_argument('--model_choice', type=str, default="FairerOPTH", choices=['FairerOPTH', 'baseline'])
 parser.add_argument('--model_path',
-                    default='checkpoints/OculoScope/model_best.ckpt', type=str)
+                    default='./checkpoints/OculoScope/model_best.ckpt', type=str)
 parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
                     help='number of data loading workers')
 parser.add_argument('--batch_size', default=16, type=int,
@@ -55,7 +55,7 @@ def generate_val_age_csv():
                         num_Symptom_classes=len(val_dataset.all_classes),
                         cutmix=None)
     model = nn.DataParallel(model)
-    state = torch.load(os.path.join(os.getcwd(), args.model_path), map_location='cpu')
+    state = torch.load(args.model_path, map_location='cpu')
     model.load_state_dict(state, strict=True)
     model.eval()
     model = model.cpu()
@@ -86,7 +86,7 @@ def generate_val_age_csv():
     val_age_df['group label'] = group_labels
     val_age_df['img name'] = img_names
 
-    save_path = os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice, 'val_age_res.csv')
+    save_path = os.path.join('../results/fairness_analysis', args.model_choice, 'val_age_res.csv')
     save_dir = os.path.dirname(save_path)
     mkdir(save_dir)
     val_age_df.to_csv(save_path, index=False)
@@ -140,7 +140,7 @@ def generate_val_gender_csv():
     val_gender_df['group label'] = group_labels
     val_gender_df['img name'] = img_names
 
-    save_path = os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice, 'val_gender_res.csv')
+    save_path = os.path.join('../results/fairness_analysis', args.model_choice, 'val_gender_res.csv')
     save_dir = os.path.dirname(save_path)
     mkdir(save_dir)
     val_gender_df.to_csv(save_path, index=False)
@@ -151,12 +151,12 @@ if __name__ == '__main__':
     generate_val_age_csv()
     print("calculate metrics on age groups...")
     age_res_dict = cal_metrics(
-        csv_path=os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice, 'val_age_res.csv'), mode="age",
-        save_dir=os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice))
+        csv_path=os.path.join('../results/fairness_analysis', args.model_choice, 'val_age_res.csv'), mode="age",
+        save_dir=os.path.join('../results/fairness_analysis', args.model_choice))
 
     print('generate prediction on validation set with gender annotation...')
     generate_val_gender_csv()
     print("calculate metrics on age groups...")
     gender_res_dict = cal_metrics(
-        csv_path=os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice, 'val_gender_res.csv'), mode="age",
-        save_dir=os.path.join(os.getcwd(), 'fairness_analysis', args.model_choice))
+        csv_path=os.path.join('../results/fairness_analysis', args.model_choice, 'val_gender_res.csv'), mode="gender",
+        save_dir=os.path.join('../results/fairness_analysis', args.model_choice))
