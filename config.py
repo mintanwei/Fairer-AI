@@ -18,5 +18,5 @@ transform_val = transforms.Compose([transforms.ToPILImage(),
                                     normalize
                                     ])
 
-OculoScope_dir = "/home/user4/workplace/data/OculoScope"
-MixNAF_dir = "/home/user4/workplace/data/MixNAF"
+OculoScope_dir = "../data/dataset/OculoScope"
+MixNAF_dir = "../data/dataset/MixNAF"
