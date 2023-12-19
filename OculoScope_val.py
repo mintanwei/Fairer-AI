@@ -14,8 +14,8 @@ from sklearn.metrics import roc_curve, auc
 from torch.cuda.amp import GradScaler, autocast
 
 parser = argparse.ArgumentParser(description='PyTorch FairerOPTH validation on OculoScope')
-parser.add_argument('--gpuid', type=str, default='1,2')
-parser.add_argument('--model_path', type=str, default="checkpoints/OculoScope/model_best.cpt")
+parser.add_argument('--gpuid', type=str, default='0')
+parser.add_argument('--model_path', type=str, default="./checkpoints/OculoScope/model_best.ckpt")
 parser.add_argument('--lr', default=1e-4, type=float)
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers')
@@ -27,6 +27,7 @@ print("CUDA_VISIBLE_DEVICES:", args.gpuid)
 
 
 def main():
+    print(torch.cuda.is_available())
     Val_dataset = OculoScope_ValDataset(data_dir=config.OculoScope_dir, transform=config.transform_val)
 
     print('\n-----Initial Dataset Information-----')
@@ -49,7 +50,7 @@ def main():
                         cutmix=None)
 
     model = nn.DataParallel(model)
-    state = torch.load(os.path.join(os.getcwd(), args.model_path), map_location='cpu')
+    state = torch.load(args.model_path, map_location='cpu')
     model.load_state_dict(state, strict=True)
     model.eval()
     model = model.cpu()
