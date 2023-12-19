@@ -14,8 +14,8 @@ from sklearn.metrics import roc_curve, auc
 from torch.cuda.amp import GradScaler, autocast
 
 parser = argparse.ArgumentParser(description='PyTorch FairerOPTH validation on MixNAF')
-parser.add_argument('--gpuid', type=str, default='1,2')
-parser.add_argument('--model_path', type=str, default="checkpoints/MixNAF/model_best.cpt")
+parser.add_argument('--gpuid', type=str, default='0')
+parser.add_argument('--model_path', type=str, default="./checkpoints/MixNAF/model_best.ckpt")
 parser.add_argument('--lr', default=1e-4, type=float)
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers')
@@ -49,7 +49,7 @@ def main():
                         cutmix=None)
 
     model = nn.DataParallel(model)
-    state = torch.load(os.path.join(os.getcwd(),args.model_path), map_location='cpu')
+    state = torch.load(args.model_path, map_location='cpu')
     model.load_state_dict(state, strict=True)
     model.eval()
     model = model.cpu()
