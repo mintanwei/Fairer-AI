@@ -10,10 +10,6 @@ This is the official code of the paper:
 ### Requirement:
 PyTorch 1.10.1, torchvision 0.11.2. The code is tested with python=3.7, cuda=11.4.
 
-% ### Prepare:
-% 1. Download MixNAF (narrow-angle dataset) and OcluloScope ( ultra-widefield dataset) at https://drive.google.com/drive/folders/1XUaillgNC0Xx60fdxMn-FfffFMNMU-jg?usp=drive_link.
-% 2. Update the "MixNAF_dir" and "OculoScope_dir" in config.py.
-
 ### Train:
 #### for ultra-widefield
 Run OculoScope_train.py to perform training. Checkpoint will be saved to ./saved_models/OculoScope/.
